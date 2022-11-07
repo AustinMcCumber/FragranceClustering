@@ -35,7 +35,7 @@ fragdf[
   which(gower_mat == max(gower_mat[gower_mat != max(gower_mat)]),
         arr.ind = TRUE)[1, ], ]
 
-#Calculate silhouette width for many k using PAM
+#Calculate silhouette width for PAM k
 sil_width <- c(NA)
 for(i in 2:10){
   
@@ -46,7 +46,7 @@ for(i in 2:10){
   sil_width[i] <- pam_fit$silinfo$avg.width
   
 }
-#Plot sihouette width (higher is better)
+#Plot sihouette
 plot(1:10, sil_width,
      xlab = "Number of clusters",
      ylab = "Silhouette Width")
@@ -55,7 +55,7 @@ lines(1:10, sil_width)
 #Silhouette indicates 9 clusters is ideal for this data set. However, the sample size at this time is likely not high enough to support this
 #6 Clusters were chosen as increasing to 7 or 8 sees a drop off in the silhouette before increasing again
 
-#Partitioning Around Mediods (PAM) was chosen as the clustering algorithm. K-Means does not work here because the data is binary/factor. 
+#Partitioning Around Mediods (PAM) was chosen as the clustering algorithm. K-Means is not optimal here because the data is binary/factor
 
 pam_fit <- pam(gower_dist, diss = TRUE, k = 6)
 pam_results <- fragdf %>%
@@ -67,8 +67,8 @@ pam_results$the_summary
 
 fragdf[pam_fit$medoids, ]
 
-#Rtsne package is used here to create a new data frame with coordinates, cluster, and fragrance name. 
-#Perplexity had to be adjusted downward due to the small size of the matrices. When more data is added, we can use Number of cells ^ (1/2)
+#Rtsne package is used here to create a new data frame with coordinates, cluster, and fragrance name 
+#Perplexity had to be adjusted downward due to the small size of the matrices. When more data is added, we can use (N)umber of cells ^ (1/2)
 
 
 tsne_obj <- Rtsne(gower_dist, is_distance = TRUE, perplexity = 6)
